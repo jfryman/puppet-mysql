@@ -1,5 +1,8 @@
 class mysql::params {
-  $ml_root_password = password_lookup('frymanet-db-root')
+  $ml_root_password   = password_lookup('frymanet-db-root')
+  $ml_backup_user     = 'backup'
+  $ml_backup_password = password_lookup('frymanet-db-backup')
+  $ml_backup_dir      = '/opt/backups'
 
   case $::operatingsystem {
     ubuntu,debian: {

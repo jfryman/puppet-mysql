@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DB_BACKUP=( <%= name %> )
+BACKUP_DIR=<%= scope.lookupvar('mysql::params::ml_backup_dir') %>
+MYSQL_USER=<%= scope.lookupvar('mysql::params::ml_backup_user') %>
+MYSQL_PASS=<%= scope.lookupvar('mysql::params::ml_backup_password') %>
+DATE=`date +%s`
+AGE=<%= max_age %>
+
+## Backup Databases
+for DB in ${DB_BACKUP[@]};
+do
+  nice -n 19 mysqldump --opt -u${MYSQL_USER} -p${MYSQL_PASS} ${DB} | nice -n 19 gzip > ${BACKUP_DIR}/${DB}-${DATE}.sql.gz
+done
+
+## Delete DB Backups older than AGE ##
+if [ -n "${BACKUP_DIR}" ]; then
+  find ${BACKUP_DIR} -mtime +5 | xargs rm -f
+fi
+
+exit 0
