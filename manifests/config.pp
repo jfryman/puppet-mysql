@@ -19,7 +19,7 @@ class mysql::config {
   }
 
   exec { 'setup-mysql-backup-user':
-    command => "mysql -uroot -p${mysql::params::ml_root_password} -e \"GRANT SHOW DATABASES, SELECT, LOCK TABLES, RELOAD ON *.* to ${mysql::params::ml_backup_user}@localhost IDENTIFIED BY \'${mysql::params::ml_backup_password}\';\"",
+    command => "mysql -uroot -p${mysql::params::ml_root_password} -e \"GRANT SHOW DATABASES, SELECT, LOCK TABLES, RELOAD ON *.* to ${mysql::params::ml_backup_user}@localhost IDENTIFIED BY '${mysql::params::ml_backup_password}';\"",
     unless  => "mysql -u${mysql::params::ml_backup_user} -p${mysql::params::ml_backup_password} -e 'SHOW DATABASES'",
   }
 }
